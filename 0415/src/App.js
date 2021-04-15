@@ -23,7 +23,7 @@ class App extends React.Component {
 	}
 
 	render() {
-		return <div>{this.state.date.toLocaleTimeString()}</div>;
+		return <h1>現在時間：{this.state.date.toLocaleTimeString()}</h1>;
 	}
 }
 
