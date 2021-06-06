@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import { Search as SearchIcon } from 'react-feather';
 
-const ProductListToolbar = (props) => (
+const ListToolbar = (props) => (
 	<Box {...props}>
 		<Box
 			sx={{
@@ -20,7 +20,7 @@ const ProductListToolbar = (props) => (
 			<Button>Import</Button>
 			<Button sx={{ mx: 1 }}>Export</Button>
 			<Button color="primary" variant="contained">
-				Add product
+				{`add ${props.type.toUpperCase()}`}
 			</Button>
 		</Box>
 		<Box sx={{ mt: 3 }}>
@@ -41,7 +41,7 @@ const ProductListToolbar = (props) => (
 									</InputAdornment>
 								),
 							}}
-							placeholder="Search product"
+							placeholder={`Search ${props.type}`}
 							variant="outlined"
 						/>
 					</Box>
@@ -51,4 +51,4 @@ const ProductListToolbar = (props) => (
 	</Box>
 );
 
-export default ProductListToolbar;
+export default ListToolbar;
