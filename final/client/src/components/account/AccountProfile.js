@@ -1,73 +1,68 @@
-import moment from 'moment';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Divider,
-  Typography
+	Avatar,
+	Box,
+	Button,
+	Card,
+	CardActions,
+	CardContent,
+	Divider,
+	Typography,
 } from '@material-ui/core';
 
-const user = {
-  avatar: '/static/images/avatars/avatar_6.png',
-  city: 'Los Angeles',
-  country: 'USA',
-  jobTitle: 'Senior Developer',
-  name: 'Katarina Smith',
-  timezone: 'GTM-7'
-};
+const AccountProfile = (props) => {
+	const [user, setUser] = useState({});
 
-const AccountProfile = (props) => (
-  <Card {...props}>
-    <CardContent>
-      <Box
-        sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-      >
-        <Avatar
-          src={user.avatar}
-          sx={{
-            height: 100,
-            width: 100
-          }}
-        />
-        <Typography
-          color="textPrimary"
-          gutterBottom
-          variant="h3"
-        >
-          {user.name}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body1"
-        >
-          {`${user.city} ${user.country}`}
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="body1"
-        >
-          {`${moment().format('hh:mm A')} ${user.timezone}`}
-        </Typography>
-      </Box>
-    </CardContent>
-    <Divider />
-    <CardActions>
-      <Button
-        color="primary"
-        fullWidth
-        variant="text"
-      >
-        Upload picture
-      </Button>
-    </CardActions>
-  </Card>
-);
+	useEffect(() => {
+		const getUser = async () => {
+			const empId = localStorage.getItem('employeeID');
+			const res = await axios.get(`/employees/${empId}`);
+			setUser(res.data[0]);
+			console.log(res.data[0]);
+		};
+		getUser();
+	}, []);
+
+	return (
+		<Card {...props}>
+			<CardContent>
+				<Box
+					sx={{
+						alignItems: 'center',
+						display: 'flex',
+						flexDirection: 'column',
+					}}
+				>
+					<Avatar
+						src={user.avatar}
+						sx={{
+							height: 100,
+							width: 100,
+						}}
+					/>
+					<Typography color="textPrimary" gutterBottom variant="h3">
+						{user.EmpName}
+					</Typography>
+					<Typography color="textSecondary" variant="body1">
+						{user.JobTitle}
+					</Typography>
+					<Typography color="textSecondary" variant="body1">
+						{`${user.ZipCode} ${user.City}${user.Address}`}
+					</Typography>
+					<Typography color="textSecondary" variant="body1">
+						{user.Phone}
+					</Typography>
+				</Box>
+			</CardContent>
+			<Divider />
+			<CardActions>
+				<Button color="primary" fullWidth variant="text">
+					Upload picture
+				</Button>
+			</CardActions>
+		</Card>
+	);
+};
 
 export default AccountProfile;

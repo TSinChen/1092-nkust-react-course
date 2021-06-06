@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
-	Avatar,
 	Box,
 	Card,
 	Checkbox,
@@ -14,12 +13,17 @@ import {
 	TableRow,
 	Typography,
 } from '@material-ui/core';
-import getInitials from 'src/utils/getInitials';
+import Buttons from './buttons/Buttons';
+import ProductRow from './row/ProductRow';
+import CustomerRow from './row/CustomerRow';
+import SalesOrderRow from './row/SalesOrderRow';
 
 const ListResults = ({ type, data, cells, ...rest }) => {
+	const navigate = useNavigate();
 	const [selectedDataIds, setSelectedDataIds] = useState([]);
 	const [limit, setLimit] = useState(10);
 	const [page, setPage] = useState(0);
+	const [editingItems, setEditingItems] = useState([]);
 
 	const handleSelectAll = (event) => {
 		let newSelectedDataIds;
@@ -65,6 +69,30 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 		setPage(newPage);
 	};
 
+	const handleNavigation = (id) => {
+		navigate(`/app/orders/${id}`);
+	};
+
+	const handleEdit = (id) => {
+		setEditingItems([...editingItems, id]);
+	};
+
+	const handleSubmit = (id) => {
+		setEditingItems([
+			...editingItems.filter((itemId) => {
+				return id !== itemId;
+			}),
+		]);
+	};
+
+	const handleDelete = (id) => {
+		setEditingItems([
+			...editingItems.filter((itemId) => {
+				return id !== itemId;
+			}),
+		]);
+	};
+
 	const setTableBody = () => {
 		switch (type) {
 			case 'product':
@@ -73,49 +101,17 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 						{data
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
-								<TableRow
-									hover
+								<ProductRow
 									key={item.ProdID}
-									selected={
-										selectedDataIds.indexOf(item.ProdID) !==
-										-1
-									}
-								>
-									<TableCell padding="checkbox">
-										<Checkbox
-											checked={
-												selectedDataIds.indexOf(
-													item.ProdID
-												) !== -1
-											}
-											onChange={(event) =>
-												handleSelectOne(
-													event,
-													item.ProdID
-												)
-											}
-											value="true"
-										/>
-									</TableCell>
-									<TableCell>
-										<Box
-											sx={{
-												alignItems: 'center',
-												display: 'flex',
-											}}
-										>
-											<Typography
-												color="textPrimary"
-												variant="body1"
-											>
-												{item.ProdName}
-											</Typography>
-										</Box>
-									</TableCell>
-									<TableCell>{item.ProdID}</TableCell>
-									<TableCell>{item.UnitPrice}</TableCell>
-									<TableCell>{item.Cost}</TableCell>
-								</TableRow>
+									item={item}
+									selectedDataIds={selectedDataIds}
+									handleSelectOne={handleSelectOne}
+									type={type}
+									editingItems={editingItems}
+									handleEdit={handleEdit}
+									handleSubmit={handleSubmit}
+									handleDelete={handleDelete}
+								/>
 							))}
 					</TableBody>
 				);
@@ -125,26 +121,63 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 						{data
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
+								<CustomerRow
+									key={item.CustId}
+									item={item}
+									selectedDataIds={selectedDataIds}
+									handleSelectOne={handleSelectOne}
+									type={type}
+									editingItems={editingItems}
+									handleEdit={handleEdit}
+									handleSubmit={handleSubmit}
+									handleDelete={handleDelete}
+								/>
+							))}
+					</TableBody>
+				);
+			case 'salesOrder':
+				return (
+					<TableBody>
+						{data
+							.slice(page * limit, (page + 1) * limit)
+							.map((item) => (
+								<SalesOrderRow
+									key={item.OrderId}
+									item={item}
+									selectedDataIds={selectedDataIds}
+									handleSelectOne={handleSelectOne}
+									type={type}
+									editingItems={editingItems}
+									handleEdit={handleEdit}
+									handleSubmit={handleSubmit}
+									handleDelete={handleDelete}
+									handleNavigation={handleNavigation}
+								/>
+							))}
+					</TableBody>
+				);
+			case 'orderDetail':
+				return (
+					<TableBody>
+						{data
+							.slice(page * limit, (page + 1) * limit)
+							.map((item) => (
 								<TableRow
 									hover
-									key={item.ProdID}
+									key={item.seq}
 									selected={
-										selectedDataIds.indexOf(item.ProdID) !==
-										-1
+										selectedDataIds.indexOf(item.seq) !== -1
 									}
 								>
 									<TableCell padding="checkbox">
 										<Checkbox
 											checked={
 												selectedDataIds.indexOf(
-													item.ProdID
+													item.seq
 												) !== -1
 											}
 											onChange={(event) =>
-												handleSelectOne(
-													event,
-													item.ProdID
-												)
+												handleSelectOne(event, item.seq)
 											}
 											value="true"
 										/>
@@ -160,13 +193,24 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 												color="textPrimary"
 												variant="body1"
 											>
-												{item.ProdName}
+												{item.OrderId}
 											</Typography>
 										</Box>
 									</TableCell>
-									<TableCell>{item.ProdID}</TableCell>
-									<TableCell>{item.UnitPrice}</TableCell>
-									<TableCell>{item.Cost}</TableCell>
+									<TableCell>{item.ProdId}</TableCell>
+									<TableCell>{item.Qty}</TableCell>
+									<TableCell>{item.Discount}</TableCell>
+									<Buttons
+										type={type}
+										editingItems={editingItems.find(
+											(id) => {
+												return id === item.ProdId;
+											}
+										)}
+										handleEditing={() =>
+											handleEdit(item.ProdId)
+										}
+									/>
 								</TableRow>
 							))}
 					</TableBody>
@@ -204,6 +248,10 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 										</TableCell>
 									);
 								})}
+								<TableCell
+									colSpan={2}
+									align="center"
+								></TableCell>
 							</TableRow>
 						</TableHead>
 						{setTableBody()}

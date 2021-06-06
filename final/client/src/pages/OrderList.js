@@ -7,21 +7,27 @@ import ListResults from 'src/components/list/ListResults';
 
 import * as constants from '../apis/constants';
 
-const CustomerList = () => {
-	const [customers, setCustomers] = useState([]);
+const OrderList = () => {
+	const [employeeID, setEmployeeID] = useState();
+	const [salesOrders, setSalesOrders] = useState([]);
 
 	useEffect(() => {
-		const getCustomers = async () => {
-			const res = await axios.get(constants.URL + '/customers');
-			setCustomers(res.data);
-		};
-		getCustomers();
+		const empId = localStorage.getItem('employeeID');
+		setEmployeeID(empId);
+
+		if (empId) {
+			const getSalesOrder = async () => {
+				const res = await axios.get(constants.URL + '/salesOrders');
+				setSalesOrders(res.data);
+			};
+			getSalesOrder();
+		}
 	}, []);
 
 	return (
 		<>
 			<Helmet>
-				<title>Customers | Material Kit</title>
+				<title>Orders | Material Kit</title>
 			</Helmet>
 			<Box
 				sx={{
@@ -31,23 +37,12 @@ const CustomerList = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="customer" />
+					<ListToolbar type="order" />
 					<Box sx={{ pt: 3 }}>
 						<ListResults
-							type="customer"
-							data={customers}
-							cells={[
-								'CustName',
-								'CustID',
-								'City',
-								'Address',
-								'ZipCode',
-								'Contact',
-								'JobTitle',
-								'Phone',
-								'Industry',
-								'TaxNo',
-							]}
+							type="salesOrder"
+							data={salesOrders}
+							cells={['OrderId', 'EmpId', 'CustId', 'OrderDate']}
 						/>
 					</Box>
 				</Container>
@@ -56,4 +51,4 @@ const CustomerList = () => {
 	);
 };
 
-export default CustomerList;
+export default OrderList;

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import { Box, Container } from '@material-ui/core';
@@ -7,21 +8,22 @@ import ListResults from 'src/components/list/ListResults';
 
 import * as constants from '../apis/constants';
 
-const CustomerList = () => {
-	const [customers, setCustomers] = useState([]);
+const OrderDetail = () => {
+	const [orderDetails, setOrderDetails] = useState([]);
+	const { oid } = useParams();
 
 	useEffect(() => {
-		const getCustomers = async () => {
-			const res = await axios.get(constants.URL + '/customers');
-			setCustomers(res.data);
+		const getDetails = async () => {
+			const res = await axios.get(constants.URL + '/orderDetails/' + oid);
+			setOrderDetails(res.data);
 		};
-		getCustomers();
+		getDetails();
 	}, []);
 
 	return (
 		<>
 			<Helmet>
-				<title>Customers | Material Kit</title>
+				<title>Order Details | Material Kit</title>
 			</Helmet>
 			<Box
 				sx={{
@@ -31,23 +33,12 @@ const CustomerList = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="customer" />
+					<ListToolbar type="detail" />
 					<Box sx={{ pt: 3 }}>
 						<ListResults
-							type="customer"
-							data={customers}
-							cells={[
-								'CustName',
-								'CustID',
-								'City',
-								'Address',
-								'ZipCode',
-								'Contact',
-								'JobTitle',
-								'Phone',
-								'Industry',
-								'TaxNo',
-							]}
+							type="orderDetail"
+							data={orderDetails}
+							cells={['OrderId', 'ProdId', 'Qty', 'Discount']}
 						/>
 					</Box>
 				</Container>
@@ -56,4 +47,4 @@ const CustomerList = () => {
 	);
 };
 
-export default CustomerList;
+export default OrderDetail;
