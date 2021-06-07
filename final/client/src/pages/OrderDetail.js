@@ -2,28 +2,123 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
-import { Box, Container } from '@material-ui/core';
+import {
+	Box,
+	Container,
+	TableRow,
+	TableCell,
+	Input,
+	Checkbox,
+} from '@material-ui/core';
 import ListToolbar from 'src/components/list/ListToolbar';
 import ListResults from 'src/components/list/ListResults';
 
 import * as constants from '../apis/constants';
+import Buttons from 'src/components/list/buttons/Buttons';
 
 const OrderDetail = () => {
-	const [orderDetails, setOrderDetails] = useState([]);
 	const { oid } = useParams();
+	const [orderDetail, setOrderDetail] = useState([]);
+	const [adding, setAdding] = useState(false);
+	const [addData, setAddData] = useState({});
 
 	useEffect(() => {
-		const getDetails = async () => {
-			const res = await axios.get(constants.URL + '/orderDetails/' + oid);
-			setOrderDetails(res.data);
+		const getDetail = async () => {
+			const res_currentOrder = await axios.get(
+				constants.URL + '/orderDetails/' + oid
+			);
+			setOrderDetail(res_currentOrder.data);
+
+			const res_allOrders = await axios.get(
+				constants.URL + '/orderDetails'
+			);
+			setAddData({
+				...addData,
+				seq: res_allOrders.data.length + 1,
+				OrderId: oid,
+			});
 		};
-		getDetails();
+		getDetail();
 	}, []);
+
+	const handleAdd = () => {
+		setAdding(true);
+	};
+
+	const handlePost = async () => {
+		setAdding(false);
+		await axios.post(constants.URL + '/orderDetails', null, {
+			params: addData,
+		});
+		window.location.reload();
+	};
+
+	const handleCancel = () => {
+		setAdding(false);
+		setAddData({});
+	};
+
+	const showAdd = () => {
+		return (
+			<TableRow>
+				<TableCell padding="checkbox">
+					<Checkbox checked={false} value="true" disabled />
+				</TableCell>
+				<TableCell>{oid}</TableCell>
+				<TableCell>
+					<Input
+						style={{ width: '100%' }}
+						placeholder={'Product ID here...'}
+						value={addData.ProdId}
+						onChange={(e) => {
+							setAddData({
+								...addData,
+								ProdId: e.target.value,
+							});
+						}}
+					/>
+				</TableCell>
+				<TableCell>
+					<Input
+						type="number"
+						style={{ width: '100%' }}
+						placeholder={'Quantity here...'}
+						value={addData.Qty}
+						onChange={(e) => {
+							setAddData({
+								...addData,
+								Qty: e.target.value,
+							});
+						}}
+					/>
+				</TableCell>
+				<TableCell>
+					<Input
+						type="number"
+						style={{ width: '100%' }}
+						placeholder={'Discount here...'}
+						value={addData.Discount}
+						onChange={(e) => {
+							setAddData({
+								...addData,
+								Discount: e.target.value,
+							});
+						}}
+					/>
+				</TableCell>
+				<Buttons
+					adding={adding}
+					handlePost={handlePost}
+					handleCancel={handleCancel}
+				/>
+			</TableRow>
+		);
+	};
 
 	return (
 		<>
 			<Helmet>
-				<title>Order Details | Material Kit</title>
+				<title>Order Detail | Material Kit</title>
 			</Helmet>
 			<Box
 				sx={{
@@ -33,13 +128,15 @@ const OrderDetail = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="detail" />
+					<ListToolbar type="detail" handleAdd={handleAdd} />
 					<Box sx={{ pt: 3 }}>
 						<ListResults
-							type="orderDetail"
-							data={orderDetails}
+							type="detail"
+							data={orderDetail}
 							cells={['OrderId', 'ProdId', 'Qty', 'Discount']}
-						/>
+						>
+							{adding ? showAdd() : ''}
+						</ListResults>
 					</Box>
 				</Container>
 			</Box>

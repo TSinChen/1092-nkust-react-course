@@ -19,7 +19,6 @@ const AccountProfile = (props) => {
 			const empId = localStorage.getItem('employeeID');
 			const res = await axios.get(`/employees/${empId}`);
 			setUser(res.data[0]);
-			console.log(res.data[0]);
 		};
 		getUser();
 	}, []);

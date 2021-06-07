@@ -1,17 +1,35 @@
 import { Fragment } from 'react';
 import { Button, TableCell } from '@material-ui/core';
 
-const Buttons = ({ type, editing, handleEdit, handleSubmit, handleDelete }) => {
-	// const handleUpdate = () => {
-	// 	switch (type) {
-	// 		case 'product':
-	// 			return;
-	// 		case 'customer':
-	// 			return;
-	// 		default:
-	// 			return;
-	// 	}
-	// };
+const Buttons = ({
+	editing,
+	handleEdit,
+	handleSubmit,
+	handleDelete,
+	adding,
+	handlePost,
+	handleCancel,
+}) => {
+	if (adding) {
+		return (
+			<Fragment>
+				<TableCell align="center">
+					<Button variant="contained" onClick={handlePost}>
+						Add
+					</Button>
+				</TableCell>
+				<TableCell align="center">
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={handleCancel}
+					>
+						Cancel
+					</Button>
+				</TableCell>
+			</Fragment>
+		);
+	}
 
 	return (
 		<Fragment>

@@ -18,7 +18,7 @@ import ProductRow from './row/ProductRow';
 import CustomerRow from './row/CustomerRow';
 import SalesOrderRow from './row/SalesOrderRow';
 
-const ListResults = ({ type, data, cells, ...rest }) => {
+const ListResults = ({ type, data, cells, children, ...rest }) => {
 	const navigate = useNavigate();
 	const [selectedDataIds, setSelectedDataIds] = useState([]);
 	const [limit, setLimit] = useState(10);
@@ -156,7 +156,7 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 							))}
 					</TableBody>
 				);
-			case 'orderDetail':
+			case 'detail':
 				return (
 					<TableBody>
 						{data
@@ -182,21 +182,7 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 											value="true"
 										/>
 									</TableCell>
-									<TableCell>
-										<Box
-											sx={{
-												alignItems: 'center',
-												display: 'flex',
-											}}
-										>
-											<Typography
-												color="textPrimary"
-												variant="body1"
-											>
-												{item.OrderId}
-											</Typography>
-										</Box>
-									</TableCell>
+									<TableCell>{item.OrderId}</TableCell>
 									<TableCell>{item.ProdId}</TableCell>
 									<TableCell>{item.Qty}</TableCell>
 									<TableCell>{item.Discount}</TableCell>
@@ -254,6 +240,7 @@ const ListResults = ({ type, data, cells, ...rest }) => {
 								></TableCell>
 							</TableRow>
 						</TableHead>
+						{children}
 						{setTableBody()}
 					</Table>
 				</Box>

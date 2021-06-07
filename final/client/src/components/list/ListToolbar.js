@@ -19,8 +19,12 @@ const ListToolbar = (props) => (
 		>
 			<Button>Import</Button>
 			<Button sx={{ mx: 1 }}>Export</Button>
-			<Button color="primary" variant="contained">
-				{`add ${props.type.toUpperCase()}`}
+			<Button
+				color="primary"
+				variant="contained"
+				onClick={props.handleAdd}
+			>
+				{`add ${props.type}`}
 			</Button>
 		</Box>
 		<Box sx={{ mt: 3 }}>
