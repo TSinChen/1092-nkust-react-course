@@ -32,11 +32,15 @@ const OrderDetail = () => {
 			const res_allOrders = await axios.get(
 				constants.URL + '/orderDetails'
 			);
-			setAddData({
-				...addData,
-				seq: res_allOrders.data.length + 1,
-				OrderId: oid,
-			});
+			if (res_allOrders.data) {
+				setAddData({
+					...addData,
+					seq:
+						res_allOrders.data[res_allOrders.data.length - 1].seq +
+						1,
+					OrderId: oid,
+				});
+			}
 		};
 		getDetail();
 	}, []);

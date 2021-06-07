@@ -11,12 +11,11 @@ import {
 	TableHead,
 	TablePagination,
 	TableRow,
-	Typography,
 } from '@material-ui/core';
-import Buttons from './buttons/Buttons';
 import ProductRow from './row/ProductRow';
 import CustomerRow from './row/CustomerRow';
 import SalesOrderRow from './row/SalesOrderRow';
+import OrderDetailRow from './row/OrderDetailRow';
 
 const ListResults = ({ type, data, cells, children, ...rest }) => {
 	const navigate = useNavigate();
@@ -77,15 +76,7 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 		setEditingItems([...editingItems, id]);
 	};
 
-	const handleSubmit = (id) => {
-		setEditingItems([
-			...editingItems.filter((itemId) => {
-				return id !== itemId;
-			}),
-		]);
-	};
-
-	const handleDelete = (id) => {
+	const handleCancelEdit = (id) => {
 		setEditingItems([
 			...editingItems.filter((itemId) => {
 				return id !== itemId;
@@ -109,8 +100,7 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 									type={type}
 									editingItems={editingItems}
 									handleEdit={handleEdit}
-									handleSubmit={handleSubmit}
-									handleDelete={handleDelete}
+									handleCancelEdit={handleCancelEdit}
 								/>
 							))}
 					</TableBody>
@@ -129,8 +119,7 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 									type={type}
 									editingItems={editingItems}
 									handleEdit={handleEdit}
-									handleSubmit={handleSubmit}
-									handleDelete={handleDelete}
+									handleCancelEdit={handleCancelEdit}
 								/>
 							))}
 					</TableBody>
@@ -149,8 +138,7 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 									type={type}
 									editingItems={editingItems}
 									handleEdit={handleEdit}
-									handleSubmit={handleSubmit}
-									handleDelete={handleDelete}
+									handleCancelEdit={handleCancelEdit}
 									handleNavigation={handleNavigation}
 								/>
 							))}
@@ -162,42 +150,17 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 						{data
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
-								<TableRow
-									hover
+								<OrderDetailRow
 									key={item.seq}
-									selected={
-										selectedDataIds.indexOf(item.seq) !== -1
-									}
-								>
-									<TableCell padding="checkbox">
-										<Checkbox
-											checked={
-												selectedDataIds.indexOf(
-													item.seq
-												) !== -1
-											}
-											onChange={(event) =>
-												handleSelectOne(event, item.seq)
-											}
-											value="true"
-										/>
-									</TableCell>
-									<TableCell>{item.OrderId}</TableCell>
-									<TableCell>{item.ProdId}</TableCell>
-									<TableCell>{item.Qty}</TableCell>
-									<TableCell>{item.Discount}</TableCell>
-									<Buttons
-										type={type}
-										editingItems={editingItems.find(
-											(id) => {
-												return id === item.ProdId;
-											}
-										)}
-										handleEditing={() =>
-											handleEdit(item.ProdId)
-										}
-									/>
-								</TableRow>
+									item={item}
+									selectedDataIds={selectedDataIds}
+									handleSelectOne={handleSelectOne}
+									type={type}
+									editingItems={editingItems}
+									handleEdit={handleEdit}
+									handleCancelEdit={handleCancelEdit}
+									handleNavigation={handleNavigation}
+								/>
 							))}
 					</TableBody>
 				);

@@ -20,8 +20,7 @@ const CustomerRow = ({
 	type,
 	editingItems,
 	handleEdit,
-	handleSubmit,
-	handleDelete,
+	handleCancelEdit,
 }) => {
 	const [newData, setNewData] = useState(item);
 	const [editing, setEditing] = useState(false);
@@ -46,6 +45,9 @@ const CustomerRow = ({
 
 	const deleteData = async (id) => {
 		await axios.delete(`${constants.URL}/customers/${id}`);
+		handleCancelEdit(id);
+		setDeleting(false);
+		window.location.reload();
 	};
 
 	return (
@@ -219,8 +221,9 @@ const CustomerRow = ({
 				type={type}
 				editing={editing}
 				handleEdit={() => handleEdit(item.CustId)}
+				handleCancelEdit={() => handleCancelEdit(item.CustId)}
 				handleSubmit={() => {
-					handleSubmit(item.CustId);
+					handleCancelEdit(item.CustId);
 					updateNewData(newData);
 				}}
 				handleDelete={() => setDeleting(true)}
@@ -238,10 +241,7 @@ const CustomerRow = ({
 							variant="contained"
 							color="secondary"
 							onClick={() => {
-								handleDelete(item.CustId);
 								deleteData(item.CustId);
-								setDeleting(false);
-								window.location.reload();
 							}}
 						>
 							Delete

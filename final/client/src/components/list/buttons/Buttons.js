@@ -4,6 +4,7 @@ import { Button, TableCell } from '@material-ui/core';
 const Buttons = ({
 	editing,
 	handleEdit,
+	handleCancelEdit,
 	handleSubmit,
 	handleDelete,
 	adding,
@@ -45,13 +46,23 @@ const Buttons = ({
 				)}
 			</TableCell>
 			<TableCell align="center">
-				<Button
-					variant="contained"
-					color="secondary"
-					onClick={handleDelete}
-				>
-					Delete
-				</Button>
+				{editing ? (
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={handleCancelEdit}
+					>
+						Cancel
+					</Button>
+				) : (
+					<Button
+						variant="contained"
+						color="secondary"
+						onClick={handleDelete}
+					>
+						Delete
+					</Button>
+				)}
 			</TableCell>
 		</Fragment>
 	);

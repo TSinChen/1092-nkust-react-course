@@ -13,7 +13,7 @@ import {
 import Buttons from '../buttons/Buttons';
 import * as constants from '../../../apis/constants';
 
-const ProductRow = ({
+const SalesOrderRow = ({
 	item,
 	selectedDataIds,
 	handleSelectOne,
@@ -28,20 +28,24 @@ const ProductRow = ({
 
 	useEffect(() => {
 		const isEditing = editingItems.find((id) => {
-			return id === item.ProdID;
+			return id === item.seq;
 		});
 		isEditing ? setEditing(true) : setEditing(false);
 	}, [editingItems]);
 
 	const updateNewData = async (newData) => {
-		await axios.patch(`${constants.URL}/products/${newData.ProdID}`, null, {
-			params: newData,
-		});
+		await axios.patch(
+			`${constants.URL}/orderDetails/${newData.seq}`,
+			null,
+			{
+				params: newData,
+			}
+		);
 	};
 
-	const deleteData = async (id) => {
-		await axios.delete(`${constants.URL}/products/${id}`);
-		handleCancelEdit(id);
+	const deleteData = async (seq) => {
+		await axios.delete(`${constants.URL}/orderDetails/${seq}`);
+		handleCancelEdit(seq);
 		setDeleting(false);
 		window.location.reload();
 	};
@@ -49,75 +53,86 @@ const ProductRow = ({
 	return (
 		<TableRow
 			hover
-			key={item.ProdID}
-			selected={selectedDataIds.indexOf(item.ProdID) !== -1}
+			key={item.seq}
+			selected={selectedDataIds.indexOf(item.seq) !== -1}
 		>
 			<TableCell padding="checkbox">
 				<Checkbox
-					checked={selectedDataIds.indexOf(item.ProdID) !== -1}
-					onChange={(event) => handleSelectOne(event, item.ProdID)}
+					checked={selectedDataIds.indexOf(item.seq) !== -1}
+					onChange={(event) => handleSelectOne(event, item.seq)}
 					value="true"
 				/>
 			</TableCell>
+			<TableCell>{item.OrderId}</TableCell>
 			<TableCell>
 				{editing ? (
 					<Input
 						style={{ width: '100%' }}
-						placeholder={item.ProdName}
-						value={newData.ProdName}
+						placeholder={item.ProdId}
+						value={newData.ProdId}
 						onChange={(e) => {
 							setNewData({
 								...newData,
-								ProdName: e.target.value,
+								ProdId: e.target.value,
 							});
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
 						}}
 					/>
 				) : (
-					newData.ProdName
-				)}
-			</TableCell>
-			<TableCell>{item.ProdID}</TableCell>
-			<TableCell>
-				{editing ? (
-					<Input
-						style={{ width: '100%' }}
-						placeholder={item.UnitPrice.toString()}
-						value={newData.UnitPrice}
-						onChange={(e) => {
-							setNewData({
-								...newData,
-								UnitPrice: e.target.value,
-							});
-						}}
-					/>
-				) : (
-					newData.UnitPrice
+					newData.ProdId
 				)}
 			</TableCell>
 			<TableCell>
 				{editing ? (
 					<Input
+						type="number"
 						style={{ width: '100%' }}
-						placeholder={item.Cost.toString()}
-						value={newData.Cost}
+						placeholder={item.Qty.toString()}
+						value={newData.Qty}
 						onChange={(e) => {
 							setNewData({
 								...newData,
-								Cost: e.target.value,
+								Qty: e.target.value,
 							});
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
 						}}
 					/>
 				) : (
-					newData.Cost
+					newData.Qty
+				)}
+			</TableCell>
+			<TableCell>
+				{editing ? (
+					<Input
+						type="number"
+						style={{ width: '100%' }}
+						placeholder={item.Discount.toString()}
+						value={newData.Discount}
+						onChange={(e) => {
+							setNewData({
+								...newData,
+								Discount: e.target.value,
+							});
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
+						}}
+					/>
+				) : (
+					newData.Discount
 				)}
 			</TableCell>
 			<Buttons
 				type={type}
 				editing={editing}
-				handleEdit={() => handleEdit(item.ProdID)}
-				handleCancelEdit={() => handleCancelEdit(item.ProdID)}
+				handleEdit={() => handleEdit(item.seq)}
+				handleCancelEdit={() => handleCancelEdit(item.seq)}
 				handleSubmit={() => {
-					handleCancelEdit(item.ProdID);
+					handleCancelEdit(item.seq);
 					updateNewData(newData);
 				}}
 				handleDelete={() => setDeleting(true)}
@@ -125,7 +140,7 @@ const ProductRow = ({
 			<Dialog open={deleting} onClose={() => setDeleting(false)}>
 				<Box component="div" m={2}>
 					<Typography variant="h3" m={2}>
-						DELETE <b>{item.ProdID}</b> ?
+						DELETE <b>{item.CustName}</b> ?
 					</Typography>
 					<Box component="div" m={2}>
 						<Button
@@ -135,7 +150,7 @@ const ProductRow = ({
 							variant="contained"
 							color="secondary"
 							onClick={() => {
-								deleteData(item.ProdID);
+								deleteData(item.seq);
 							}}
 						>
 							Delete
@@ -155,4 +170,4 @@ const ProductRow = ({
 	);
 };
 
-export default ProductRow;
+export default SalesOrderRow;

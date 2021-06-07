@@ -21,8 +21,7 @@ const SalesOrderRow = ({
 	type,
 	editingItems,
 	handleEdit,
-	handleSubmit,
-	handleDelete,
+	handleCancelEdit,
 	handleNavigation,
 }) => {
 	const [newData, setNewData] = useState(item);
@@ -48,6 +47,9 @@ const SalesOrderRow = ({
 
 	const deleteData = async (id) => {
 		await axios.delete(`${constants.URL}/salesOrders/${id}`);
+		handleCancelEdit(id);
+		setDeleting(false);
+		window.location.reload();
 	};
 
 	return (
@@ -132,8 +134,9 @@ const SalesOrderRow = ({
 				type={type}
 				editing={editing}
 				handleEdit={() => handleEdit(item.OrderId)}
+				handleCancelEdit={() => handleCancelEdit(item.OrderId)}
 				handleSubmit={() => {
-					handleSubmit(item.OrderId);
+					handleCancelEdit(item.OrderId);
 					updateNewData(newData);
 				}}
 				handleDelete={() => setDeleting(true)}
@@ -151,10 +154,7 @@ const SalesOrderRow = ({
 							variant="contained"
 							color="secondary"
 							onClick={() => {
-								handleDelete(item.OrderId);
 								deleteData(item.OrderId);
-								setDeleting(false);
-								window.location.reload();
 							}}
 						>
 							Delete
