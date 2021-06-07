@@ -22,6 +22,16 @@ app.use(cors());
 
 const PORT = process.env.PORT || 5000;
 
+// /employees/:eid
+app.get('/employees/:eid', (req, res) => {
+	const { eid } = req.params;
+	const sql = `SELECT * FROM employee WHERE EmpId = '${eid}'`;
+	const query = db.query(sql, (err, result) => {
+		if (err) throw err;
+		res.status(200).json(result);
+	});
+});
+
 // /products
 app.get('/products', (req, res) => {
 	const sql = 'SELECT * FROM product';
@@ -34,22 +44,21 @@ app.get('/products', (req, res) => {
 app.post('/products', (req, res) => {
 	const sql = 'INSERT INTO product SET ?';
 	const newProduct = req.query;
-
 	const query = db.query(sql, newProduct, (err, result) => {
 		if (err) throw err;
 		res.status(201).json(newProduct);
 	});
 });
 
-// /products/:pid
-app.get('/products/:pid', (req, res) => {
-	const { pid } = req.params;
-	const sql = `SELECT * FROM product WHERE ProdID = '${pid}'`;
-	const query = db.query(sql, (err, result) => {
-		if (err) throw err;
-		res.status(200).json(result);
-	});
-});
+// // /products/:pid
+// app.get('/products/:pid', (req, res) => {
+// 	const { pid } = req.params;
+// 	const sql = `SELECT * FROM product WHERE ProdID = '${pid}'`;
+// 	const query = db.query(sql, (err, result) => {
+// 		if (err) throw err;
+// 		res.status(200).json(result);
+// 	});
+// });
 
 app.patch('/products/:pid', (req, res) => {
 	const { pid } = req.params;
@@ -78,6 +87,15 @@ app.get('/customers', (req, res) => {
 	const query = db.query(sql, (err, result) => {
 		if (err) throw err;
 		res.status(200).json(result);
+	});
+});
+
+app.post('/customers', (req, res) => {
+	const sql = 'INSERT INTO customer SET ?';
+	const newCustomer = req.query;
+	const query = db.query(sql, newCustomer, (err, result) => {
+		if (err) throw err;
+		res.status(201).json(newCustomer);
 	});
 });
 
@@ -116,9 +134,20 @@ app.delete('/customers/:cid', (req, res) => {
 // /salesOrders
 app.get('/salesOrders', (req, res) => {
 	const sql = `SELECT * FROM salesorder`;
+
 	const query = db.query(sql, (err, result) => {
 		if (err) throw err;
 		res.status(200).json(result);
+	});
+});
+
+app.post('/salesOrders', (req, res) => {
+	const sql = 'INSERT INTO salesorder SET ?';
+	const newOrder = { ...req.query, OrderDate: new Date(), Descript: '' };
+
+	const query = db.query(sql, newOrder, (err, result) => {
+		if (err) throw err;
+		res.status(201).json(newOrder);
 	});
 });
 
@@ -144,6 +173,26 @@ app.delete('/salesOrders/:oid', (req, res) => {
 	});
 });
 
+// /orderDetail
+app.get('/orderDetails', (req, res) => {
+	const sql = 'SELECT * FROM orderdetail';
+
+	const query = db.query(sql, (err, result) => {
+		if (err) throw err;
+		res.status(201).json(result);
+	});
+});
+
+app.post('/orderDetails', (req, res) => {
+	const sql = 'INSERT INTO orderdetail SET ?';
+	const newDetail = req.query;
+
+	const query = db.query(sql, newDetail, (err, result) => {
+		if (err) throw err;
+		res.status(201).json(newDetail);
+	});
+});
+
 // /orderDetail/:oid
 app.get('/orderDetails/:oid', (req, res) => {
 	const { oid } = req.params;
@@ -155,35 +204,26 @@ app.get('/orderDetails/:oid', (req, res) => {
 	});
 });
 
-// // /salesOrders/:eid
-// app.get('/salesOrders/:eid', (req, res) => {
-// 	const { eid } = req.params;
+// /orderDetail/:seq
+app.patch('/orderDetails/:seq', (req, res) => {
+	const { seq } = req.params;
+	const { ProdId, Qty, Discount } = req.query;
 
-// 	const sql = `SELECT * FROM salesorder WHERE EmpId = ${eid}`;
-// 	const query = db.query(sql, (err, result) => {
-// 		if (err) throw err;
-// 		res.status(200).json(result);
-// 	});
-// });
+	const sql = `UPDATE orderdetail SET ProdId = '${ProdId}', Qty = ${Qty}, Discount = ${Discount} WHERE seq = '${seq}'`;
 
-// // /orderDetail/:oid
-// app.get('/orderDetail/:oid', (req, res) => {
-// 	const { oid } = req.params;
-
-// 	const sql = `SELECT * FROM orderDetail WHERE OrderId = ${oid}`;
-// 	const query = db.query(sql, (err, result) => {
-// 		if (err) throw err;
-// 		res.status(200).json(result);
-// 	});
-// });
-
-// /employees/:eid
-app.get('/employees/:eid', (req, res) => {
-	const { eid } = req.params;
-	const sql = `SELECT * FROM employee WHERE EmpId = '${eid}'`;
 	const query = db.query(sql, (err, result) => {
 		if (err) throw err;
-		res.status(200).json(result);
+		res.json(result);
+	});
+});
+
+app.delete('/orderDetails/:seq', (req, res) => {
+	const { seq } = req.params;
+
+	const sql = `DELETE FROM orderdetail WHERE seq = ${seq}`;
+	const query = db.query(sql, (err, result) => {
+		if (err) throw err;
+		res.json(result);
 	});
 });
 
