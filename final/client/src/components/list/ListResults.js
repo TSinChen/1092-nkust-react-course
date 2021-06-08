@@ -17,7 +17,7 @@ import CustomerRow from './row/CustomerRow';
 import SalesOrderRow from './row/SalesOrderRow';
 import OrderDetailRow from './row/OrderDetailRow';
 
-const ListResults = ({ type, data, cells, children, ...rest }) => {
+const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 	const navigate = useNavigate();
 	const [selectedDataIds, setSelectedDataIds] = useState([]);
 	const [limit, setLimit] = useState(10);
@@ -28,7 +28,22 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 		let newSelectedDataIds;
 
 		if (event.target.checked) {
-			newSelectedDataIds = data.map((item) => item.ProdID);
+			switch (type) {
+				case 'product':
+					newSelectedDataIds = data.map((item) => item.ProdID);
+					break;
+				case 'customer':
+					newSelectedDataIds = data.map((item) => item.CustId);
+					break;
+				case 'salesOrder':
+					newSelectedDataIds = data.map((item) => item.OrderId);
+					break;
+				case 'detail':
+					newSelectedDataIds = data.map((item) => item.seq);
+					break;
+				default:
+					break;
+			}
 		} else {
 			newSelectedDataIds = [];
 		}
@@ -86,29 +101,16 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 
 	const setTableBody = () => {
 		switch (type) {
-			case 'product':
-				return (
-					<TableBody>
-						{data
-							.slice(page * limit, (page + 1) * limit)
-							.map((item) => (
-								<ProductRow
-									key={item.ProdID}
-									item={item}
-									selectedDataIds={selectedDataIds}
-									handleSelectOne={handleSelectOne}
-									type={type}
-									editingItems={editingItems}
-									handleEdit={handleEdit}
-									handleCancelEdit={handleCancelEdit}
-								/>
-							))}
-					</TableBody>
-				);
 			case 'customer':
 				return (
 					<TableBody>
 						{data
+							.filter((item) => {
+								return (
+									item.CustName.includes(searchQuery) ||
+									item.CustId.includes(searchQuery)
+								);
+							})
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<CustomerRow
@@ -124,10 +126,42 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 							))}
 					</TableBody>
 				);
+			case 'product':
+				return (
+					<TableBody>
+						{data
+							.filter((item) => {
+								return (
+									item.ProdName.includes(searchQuery) ||
+									item.ProdID.includes(searchQuery)
+								);
+							})
+							.slice(page * limit, (page + 1) * limit)
+							.map((item) => (
+								<ProductRow
+									key={item.ProdID}
+									item={item}
+									selectedDataIds={selectedDataIds}
+									handleSelectOne={handleSelectOne}
+									type={type}
+									editingItems={editingItems}
+									handleEdit={handleEdit}
+									handleCancelEdit={handleCancelEdit}
+								/>
+							))}
+					</TableBody>
+				);
 			case 'salesOrder':
 				return (
 					<TableBody>
 						{data
+							.filter((item) => {
+								return (
+									item.OrderId.includes(searchQuery) ||
+									item.EmpId.includes(searchQuery) ||
+									item.CustId.includes(searchQuery)
+								);
+							})
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<SalesOrderRow
@@ -148,6 +182,11 @@ const ListResults = ({ type, data, cells, children, ...rest }) => {
 				return (
 					<TableBody>
 						{data
+							.filter((item) => {
+								return (
+									item.ProdId.includes(searchQuery)
+								);
+							})
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<OrderDetailRow

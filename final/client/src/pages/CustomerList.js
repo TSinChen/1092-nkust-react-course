@@ -19,6 +19,7 @@ const CustomerList = () => {
 	const [customers, setCustomers] = useState([]);
 	const [adding, setAdding] = useState(false);
 	const [addData, setAddData] = useState({});
+	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
 		const getCustomers = async () => {
@@ -44,6 +45,10 @@ const CustomerList = () => {
 		setAdding(false);
 		setAddData({});
 	};
+
+	// const onSearchQueryChange = (value) => {
+	// 	setSearchQuery(value);
+	// };
 
 	const showAdd = () => {
 		return (
@@ -203,7 +208,12 @@ const CustomerList = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="customer" handleAdd={handleAdd} />
+					<ListToolbar
+						type="customer"
+						handleAdd={handleAdd}
+						searchQuery={searchQuery}
+						setSearchQuery={setSearchQuery}
+					/>
 					<Box sx={{ pt: 3 }}>
 						<ListResults
 							type="customer"
@@ -220,6 +230,7 @@ const CustomerList = () => {
 								'Industry',
 								'TaxNo',
 							]}
+							searchQuery={searchQuery}
 						>
 							{adding ? showAdd() : ''}
 						</ListResults>

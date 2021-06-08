@@ -82,16 +82,18 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 
 	useEffect(() => {
 		const empID = localStorage.getItem('employeeID');
-		if (empID) {
-			setIsLogin(true);
-		} else {
-			setIsLogin(false);
-		}
+
 		const getEmployee = async () => {
 			const res = await axios.get(constants.URL + '/employees/' + empID);
 			setUser(res.data[0]);
 		};
-		getEmployee();
+
+		if (empID) {
+			setIsLogin(true);
+			getEmployee();
+		} else {
+			setIsLogin(false);
+		}
 	}, []);
 
 	useEffect(() => {
@@ -123,14 +125,15 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 						cursor: 'pointer',
 						width: 64,
 						height: 64,
+						marginBottom: 1,
 					}}
 					to="/app/account"
 				/>
-				<Typography color="textPrimary" variant="h5">
-					{user ? user.EmpName : '尚未登入'}
+				<Typography color="textPrimary" gutterBottom variant="h5">
+					{isLogin ? user.EmpName : '尚未登入'}
 				</Typography>
-				<Typography color="textSecondary" variant="body2">
-					{user ? user.JobTitle : '尚未登入'}
+				<Typography color="textSecondary" gutterBottom variant="body2">
+					{isLogin ? user.JobTitle : '尚未登入'}
 				</Typography>
 			</Box>
 			<Divider />
@@ -144,6 +147,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 									key={item.title}
 									title="Logout"
 									icon={item.icon}
+									onClick={() => {
+										localStorage.setItem('employeeID', '');
+									}}
 								/>
 							) : (
 								<NavItem

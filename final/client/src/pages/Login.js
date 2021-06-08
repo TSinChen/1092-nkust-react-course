@@ -42,7 +42,7 @@ const Login = () => {
 						}}
 						onSubmit={() => {
 							localStorage.setItem('employeeID', employeeID);
-							navigate('/app/dashboard', { replace: true });
+							navigate('/app/account', { replace: true });
 						}}
 					>
 						{({

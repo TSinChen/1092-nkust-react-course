@@ -19,6 +19,7 @@ const ProductList = () => {
 	const [products, setProducts] = useState([]);
 	const [adding, setAdding] = useState(false);
 	const [addData, setAddData] = useState({});
+	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
 		const getProducts = async () => {
@@ -43,6 +44,10 @@ const ProductList = () => {
 	const handleCancel = () => {
 		setAdding(false);
 		setAddData({});
+	};
+
+	const onSearchQueryChange = (value) => {
+		setSearchQuery(value);
 	};
 
 	const showAdd = () => {
@@ -127,12 +132,18 @@ const ProductList = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="product" handleAdd={handleAdd} />
+					<ListToolbar
+						type="product"
+						handleAdd={handleAdd}
+						searchQuery={searchQuery}
+						setSearchQuery={setSearchQuery}
+					/>
 					<Box sx={{ pt: 3 }}>
 						<ListResults
 							type="product"
 							data={products}
 							cells={['ProdName', 'ProdID', 'UnitPrice', 'Cost']}
+							searchQuery={searchQuery}
 						>
 							{adding ? showAdd() : ''}
 						</ListResults>

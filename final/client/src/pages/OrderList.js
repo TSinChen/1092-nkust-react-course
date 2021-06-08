@@ -19,6 +19,7 @@ const OrderList = () => {
 	const [salesOrders, setSalesOrders] = useState([]);
 	const [adding, setAdding] = useState(false);
 	const [addData, setAddData] = useState({});
+	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
 		const getSalesOrder = async () => {
@@ -47,6 +48,10 @@ const OrderList = () => {
 	const handleCancel = () => {
 		setAdding(false);
 		setAddData({});
+	};
+
+	const onSearchQueryChange = (value) => {
+		setSearchQuery(value);
 	};
 
 	const showAdd = () => {
@@ -123,12 +128,18 @@ const OrderList = () => {
 				}}
 			>
 				<Container maxWidth={false}>
-					<ListToolbar type="order" handleAdd={handleAdd} />
+					<ListToolbar
+						type="order"
+						handleAdd={handleAdd}
+						searchQuery={searchQuery}
+						setSearchQuery={setSearchQuery}
+					/>
 					<Box sx={{ pt: 3 }}>
 						<ListResults
 							type="salesOrder"
 							data={salesOrders}
 							cells={['OrderId', 'EmpId', 'CustId', 'OrderDate']}
+							searchQuery={searchQuery}
 						>
 							{adding ? showAdd() : ''}
 						</ListResults>

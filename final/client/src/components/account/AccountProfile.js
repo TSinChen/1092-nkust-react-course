@@ -38,18 +38,31 @@ const AccountProfile = (props) => {
 						sx={{
 							height: 100,
 							width: 100,
+							marginBottom: 1.5,
 						}}
 					/>
 					<Typography color="textPrimary" gutterBottom variant="h3">
 						{user.EmpName}
 					</Typography>
-					<Typography color="textSecondary" variant="body1">
+					<Typography
+						color="textSecondary"
+						gutterBottom
+						variant="body1"
+					>
 						{user.JobTitle}
 					</Typography>
-					<Typography color="textSecondary" variant="body1">
+					<Typography
+						color="textSecondary"
+						gutterBottom
+						variant="body1"
+					>
 						{`${user.ZipCode} ${user.City}${user.Address}`}
 					</Typography>
-					<Typography color="textSecondary" variant="body1">
+					<Typography
+						color="textSecondary"
+						gutterBottom
+						variant="body1"
+					>
 						{user.Phone}
 					</Typography>
 				</Box>
