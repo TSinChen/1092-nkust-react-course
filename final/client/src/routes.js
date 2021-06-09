@@ -11,6 +11,7 @@ import Register from 'src/pages/Register';
 import Settings from 'src/pages/Settings';
 import OrderList from './pages/OrderList';
 import OrderDetail from './pages/OrderDetail';
+import Report from './pages/Report';
 
 const routes = [
 	{
@@ -23,6 +24,7 @@ const routes = [
 			{ path: 'products', element: <ProductList /> },
 			{ path: 'orders', element: <OrderList /> },
 			{ path: 'orders/:oid', element: <OrderDetail /> },
+			{ path: 'report/', element: <Report /> },
 			{ path: 'settings', element: <Settings /> },
 			{ path: '*', element: <Navigate to="/404" /> },
 		],

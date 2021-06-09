@@ -12,18 +12,28 @@ import {
 } from '@material-ui/core';
 
 const states = [
-	{
-		value: 'taipei',
-		label: 'Taipei',
-	},
-	{
-		value: 'taichung',
-		label: 'Taichung',
-	},
-	{
-		value: 'kaohsiung',
-		label: 'Kaohsiung',
-	},
+	{ label: '臺北市' },
+	{ label: '新北市' },
+	{ label: '桃園市' },
+	{ label: '臺中市' },
+	{ label: '臺南市' },
+	{ label: '高雄市' },
+	{ label: '基隆市' },
+	{ label: '新竹市' },
+	{ label: '新竹縣' },
+	{ label: '苗栗縣' },
+	{ label: '彰化縣' },
+	{ label: '南投縣' },
+	{ label: '雲林縣' },
+	{ label: '嘉義縣' },
+	{ label: '嘉義市' },
+	{ label: '屏東縣' },
+	{ label: '宜蘭縣' },
+	{ label: '花蓮縣' },
+	{ label: '臺東縣' },
+	{ label: '金門縣' },
+	{ label: '澎湖縣' },
+	{ label: '連江縣' },
 ];
 
 const AccountProfileDetails = (props) => {
@@ -112,14 +122,16 @@ const AccountProfileDetails = (props) => {
 									required
 									select
 									SelectProps={{ native: true }}
-									value={user.City}
 									variant="outlined"
 									onChange={handleChange}
 								>
+									<option value={user.City}>
+										{user.City}
+									</option>
 									{states.map((option) => (
 										<option
 											key={option.value}
-											value={option.value}
+											value={option.label}
 										>
 											{option.label}
 										</option>

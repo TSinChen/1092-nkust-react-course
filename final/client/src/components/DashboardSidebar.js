@@ -22,6 +22,7 @@ import {
 	User as UserIcon,
 	UserPlus as UserPlusIcon,
 	Users as UsersIcon,
+	ShoppingCart as ShoppingCartIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
 
@@ -47,6 +48,11 @@ const items = [
 		href: '/app/orders',
 		icon: AlignLeftIcon,
 		title: 'Orders',
+	},
+	{
+		href: '/app/report',
+		icon: ShoppingCartIcon,
+		title: 'Report',
 	},
 	{
 		href: '/app/account',
@@ -127,7 +133,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 						height: 64,
 						marginBottom: 1,
 					}}
-					to="/app/account"
+					to={isLogin ? '/app/account' : '/login'}
 				/>
 				<Typography color="textPrimary" gutterBottom variant="h5">
 					{isLogin ? user.EmpName : '尚未登入'}
@@ -139,9 +145,9 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 			<Divider />
 			<Box sx={{ p: 2 }}>
 				<List>
-					{items.map((item) =>
-						item.title === 'Login' ? (
-							isLogin ? (
+					{items.map((item) => {
+						if (item.title === 'Login' && isLogin) {
+							return (
 								<NavItem
 									href="/"
 									key={item.title}
@@ -151,23 +157,27 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 										localStorage.setItem('employeeID', '');
 									}}
 								/>
-							) : (
+							);
+						}
+						if (item.title === 'Account' && !isLogin) {
+							return (
 								<NavItem
-									href={item.href}
+									href={'/login'}
 									key={item.title}
 									title={item.title}
 									icon={item.icon}
 								/>
-							)
-						) : (
+							);
+						}
+						return (
 							<NavItem
 								href={item.href}
 								key={item.title}
 								title={item.title}
 								icon={item.icon}
 							/>
-						)
-					)}
+						);
+					})}
 				</List>
 			</Box>
 			<Box sx={{ flexGrow: 1 }} />
