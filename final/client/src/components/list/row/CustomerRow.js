@@ -31,7 +31,7 @@ const CustomerRow = ({
 			return id === item.CustId;
 		});
 		isEditing ? setEditing(true) : setEditing(false);
-	}, [editingItems]);
+	}, [editingItems, item.CustId]);
 
 	const updateNewData = async (newData) => {
 		await axios.patch(

@@ -48,7 +48,9 @@ const Report = () => {
 			setShowSalesOrders(res.data);
 		};
 		getOrders();
+	}, []);
 
+	useEffect(() => {
 		const getProducts = async () => {
 			const res = await axios.get(`${constants.URL}/products`);
 			res.data.forEach((product) => {
@@ -61,7 +63,7 @@ const Report = () => {
 			});
 		};
 		getProducts();
-	}, []);
+	}, [productMap]);
 
 	useEffect(() => {
 		showSalesOrders.forEach((order) => {
@@ -80,13 +82,12 @@ const Report = () => {
 			arr_keys.push(key);
 		}
 		setKeys(arr_keys);
-	}, [showSalesOrders]);
+	}, [showSalesOrders, map]);
 
 	const handleSubmit = () => {
 		setMap(new Map());
 		const searchDateStart = new Date(dateStart);
 		const searchDateEnd = new Date(dateEnd);
-		console.log(searchDateStart, searchDateEnd);
 
 		const orders = salesOrders.filter((order) => {
 			const date = new Date(order.OrderDate);

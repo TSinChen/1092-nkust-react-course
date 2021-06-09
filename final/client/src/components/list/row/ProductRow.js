@@ -31,7 +31,7 @@ const ProductRow = ({
 			return id === item.ProdID;
 		});
 		isEditing ? setEditing(true) : setEditing(false);
-	}, [editingItems]);
+	}, [editingItems, item.ProdID]);
 
 	const updateNewData = async (newData) => {
 		await axios.patch(`${constants.URL}/products/${newData.ProdID}`, null, {

@@ -106,7 +106,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 		if (openMobile && onMobileClose) {
 			onMobileClose();
 		}
-	}, [location.pathname]);
+	}, [location.pathname, openMobile, onMobileClose]);
 
 	const content = (
 		<Box

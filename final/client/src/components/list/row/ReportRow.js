@@ -16,21 +16,23 @@ const ReportRow = ({ custId, orderIds, productMap }) => {
 			setCustomer(res.data[0]);
 		};
 		getCustomer(custId);
-	}, []);
+	}, [custId]);
 
 	useEffect(() => {
 		let arr = [];
-		orderIds.forEach((oid) => {
-			const getSalesOrders = async () => {
-				const res = await axios.get(
-					`${constants.URL}/orderDetails/${oid}`
-				);
-				arr = arr.concat(res.data);
-				setDetails(arr);
-			};
-			getSalesOrders();
-		});
-	}, [productMap]);
+		if (orderIds) {
+			orderIds.forEach((oid) => {
+				const getSalesOrders = async () => {
+					const res = await axios.get(
+						`${constants.URL}/orderDetails/${oid}`
+					);
+					arr = arr.concat(res.data);
+					setDetails(arr);
+				};
+				getSalesOrders();
+			});
+		}
+	}, [productMap, orderIds]);
 
 	useEffect(() => {
 		if (details) {
@@ -63,7 +65,7 @@ const ReportRow = ({ custId, orderIds, productMap }) => {
 			setTotalSales(sales);
 			setTotalProfit(profit);
 		}
-	}, [details]);
+	}, [details, productMap]);
 
 	return (
 		<TableRow hover>

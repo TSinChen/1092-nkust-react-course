@@ -31,7 +31,7 @@ const SalesOrderRow = ({
 			return id === item.seq;
 		});
 		isEditing ? setEditing(true) : setEditing(false);
-	}, [editingItems]);
+	}, [editingItems, item.seq]);
 
 	const updateNewData = async (newData) => {
 		await axios.patch(
