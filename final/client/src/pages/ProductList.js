@@ -18,7 +18,12 @@ import Buttons from 'src/components/list/buttons/Buttons';
 const ProductList = () => {
 	const [products, setProducts] = useState([]);
 	const [adding, setAdding] = useState(false);
-	const [addData, setAddData] = useState({});
+	const [addData, setAddData] = useState({
+		ProdName: '',
+		ProdID: '',
+		UnitPrice: '',
+		Cost: '',
+	});
 	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
@@ -43,11 +48,12 @@ const ProductList = () => {
 
 	const handleCancel = () => {
 		setAdding(false);
-		setAddData({});
-	};
-
-	const onSearchQueryChange = (value) => {
-		setSearchQuery(value);
+		setAddData({
+			ProdName: '',
+			ProdID: '',
+			UnitPrice: '',
+			Cost: '',
+		});
 	};
 
 	const showAdd = () => {
@@ -145,7 +151,7 @@ const ProductList = () => {
 							cells={['ProdName', 'ProdID', 'UnitPrice', 'Cost']}
 							searchQuery={searchQuery}
 						>
-							{adding ? showAdd() : ''}
+							{adding && showAdd()}
 						</ListResults>
 					</Box>
 				</Container>

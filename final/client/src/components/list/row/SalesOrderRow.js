@@ -144,7 +144,7 @@ const SalesOrderRow = ({
 			<Dialog open={deleting} onClose={() => setDeleting(false)}>
 				<Box component="div" m={2}>
 					<Typography variant="h3" m={2}>
-						DELETE <b>{item.CustName}</b> ?
+						DELETE <b>{item.OrderId}</b> ?
 					</Typography>
 					<Box component="div" m={2}>
 						<Button

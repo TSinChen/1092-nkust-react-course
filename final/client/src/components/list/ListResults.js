@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
@@ -23,6 +23,52 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 	const [limit, setLimit] = useState(10);
 	const [page, setPage] = useState(0);
 	const [editingItems, setEditingItems] = useState([]);
+	const [showData, setShowData] = useState([]);
+
+	useEffect(() => {
+		switch (type) {
+			case 'customer':
+				setShowData(
+					data.filter((item) => {
+						return (
+							item.CustName.includes(searchQuery) ||
+							item.CustId.includes(searchQuery)
+						);
+					})
+				);
+				break;
+			case 'product':
+				setShowData(
+					data.filter((item) => {
+						return (
+							item.ProdName.includes(searchQuery) ||
+							item.ProdID.includes(searchQuery)
+						);
+					})
+				);
+				break;
+			case 'salesOrder':
+				setShowData(
+					data.filter((item) => {
+						return (
+							item.OrderId.includes(searchQuery) ||
+							item.EmpId.includes(searchQuery) ||
+							item.CustId.includes(searchQuery)
+						);
+					})
+				);
+				break;
+			case 'detail':
+				setShowData(
+					data.filter((item) => {
+						return item.ProdId.includes(searchQuery);
+					})
+				);
+				break;
+			default:
+				return;
+		}
+	}, [data, searchQuery, type]);
 
 	const handleSelectAll = (event) => {
 		let newSelectedDataIds;
@@ -76,6 +122,7 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 	};
 
 	const handleLimitChange = (event) => {
+		setPage(0);
 		setLimit(event.target.value);
 	};
 
@@ -104,13 +151,8 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 			case 'customer':
 				return (
 					<TableBody>
-						{data
-							.filter((item) => {
-								return (
-									item.CustName.includes(searchQuery) ||
-									item.CustId.includes(searchQuery)
-								);
-							})
+						{children}
+						{showData
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<CustomerRow
@@ -129,13 +171,8 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 			case 'product':
 				return (
 					<TableBody>
-						{data
-							.filter((item) => {
-								return (
-									item.ProdName.includes(searchQuery) ||
-									item.ProdID.includes(searchQuery)
-								);
-							})
+						{children}
+						{showData
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<ProductRow
@@ -154,14 +191,8 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 			case 'salesOrder':
 				return (
 					<TableBody>
-						{data
-							.filter((item) => {
-								return (
-									item.OrderId.includes(searchQuery) ||
-									item.EmpId.includes(searchQuery) ||
-									item.CustId.includes(searchQuery)
-								);
-							})
+						{children}
+						{showData
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<SalesOrderRow
@@ -181,12 +212,8 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 			case 'detail':
 				return (
 					<TableBody>
-						{data
-							.filter((item) => {
-								return (
-									item.ProdId.includes(searchQuery)
-								);
-							})
+						{children}
+						{showData
 							.slice(page * limit, (page + 1) * limit)
 							.map((item) => (
 								<OrderDetailRow
@@ -242,14 +269,13 @@ const ListResults = ({ type, data, cells, children, searchQuery, ...rest }) => {
 								></TableCell>
 							</TableRow>
 						</TableHead>
-						{children}
 						{setTableBody()}
 					</Table>
 				</Box>
 			</PerfectScrollbar>
 			<TablePagination
 				component="div"
-				count={data.length}
+				count={showData.length}
 				onPageChange={handlePageChange}
 				onRowsPerPageChange={handleLimitChange}
 				page={page}

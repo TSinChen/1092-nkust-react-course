@@ -1,3 +1,5 @@
+import { Fragment } from 'react';
+import { Search as SearchIcon } from 'react-feather';
 import {
 	Box,
 	Button,
@@ -7,9 +9,8 @@ import {
 	InputAdornment,
 	SvgIcon,
 } from '@material-ui/core';
-import { Search as SearchIcon } from 'react-feather';
 
-const ListToolbar = (props) => {
+const ListToolbar = ({ type, handleAdd, searchQuery, setSearchQuery }) => {
 	const setPlaceholder = (type) => {
 		switch (type) {
 			case 'customer':
@@ -26,7 +27,7 @@ const ListToolbar = (props) => {
 	};
 
 	return (
-		<Box {...props}>
+		<Fragment>
 			<Box
 				sx={{
 					display: 'flex',
@@ -35,12 +36,8 @@ const ListToolbar = (props) => {
 			>
 				<Button>Import</Button>
 				<Button sx={{ mx: 1 }}>Export</Button>
-				<Button
-					color="primary"
-					variant="contained"
-					onClick={props.handleAdd}
-				>
-					{`add ${props.type}`}
+				<Button color="primary" variant="contained" onClick={handleAdd}>
+					{`add ${type}`}
 				</Button>
 			</Box>
 			<Box sx={{ mt: 3 }}>
@@ -61,20 +58,18 @@ const ListToolbar = (props) => {
 										</InputAdornment>
 									),
 								}}
-								placeholder={`Search ${setPlaceholder(
-									props.type
-								)}`}
+								placeholder={`Search ${setPlaceholder(type)}`}
 								variant="outlined"
-								value={props.searchQuery}
+								value={searchQuery}
 								onChange={(e) => {
-									props.setSearchQuery(e.target.value);
+									setSearchQuery(e.target.value);
 								}}
 							/>
 						</Box>
 					</CardContent>
 				</Card>
 			</Box>
-		</Box>
+		</Fragment>
 	);
 };
 

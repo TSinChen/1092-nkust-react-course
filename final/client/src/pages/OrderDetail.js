@@ -20,7 +20,13 @@ const OrderDetail = () => {
 	const { oid } = useParams();
 	const [orderDetail, setOrderDetail] = useState([]);
 	const [adding, setAdding] = useState(false);
-	const [addData, setAddData] = useState({});
+	const [addData, setAddData] = useState({
+		seq: '',
+		OrderId: '',
+		ProdId: '',
+		Qty: '',
+		Discount: '',
+	});
 	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
@@ -60,11 +66,13 @@ const OrderDetail = () => {
 
 	const handleCancel = () => {
 		setAdding(false);
-		setAddData({});
-	};
-
-	const onSearchQueryChange = (value) => {
-		setSearchQuery(value);
+		setAddData({
+			seq: '',
+			OrderId: '',
+			ProdId: '',
+			Qty: '',
+			Discount: '',
+		});
 	};
 
 	const showAdd = () => {
@@ -150,7 +158,7 @@ const OrderDetail = () => {
 							cells={['OrderId', 'ProdId', 'Qty', 'Discount']}
 							searchQuery={searchQuery}
 						>
-							{adding ? showAdd() : ''}
+							{adding && showAdd()}
 						</ListResults>
 					</Box>
 				</Container>

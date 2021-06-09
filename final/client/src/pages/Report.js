@@ -84,11 +84,9 @@ const Report = () => {
 
 	const handleSubmit = () => {
 		setMap(new Map());
-		console.log(1);
 		const searchDateStart = new Date(dateStart);
 		const searchDateEnd = new Date(dateEnd);
-		console.log(searchDateStart);
-		console.log(searchDateEnd);
+		console.log(searchDateStart, searchDateEnd);
 
 		const orders = salesOrders.filter((order) => {
 			const date = new Date(order.OrderDate);

@@ -18,7 +18,18 @@ import Buttons from 'src/components/list/buttons/Buttons';
 const CustomerList = () => {
 	const [customers, setCustomers] = useState([]);
 	const [adding, setAdding] = useState(false);
-	const [addData, setAddData] = useState({});
+	const [addData, setAddData] = useState({
+		CustName: '',
+		CustId: '',
+		City: '',
+		Address: '',
+		ZipCode: '',
+		Contact: '',
+		JobTitle: '',
+		Phone: '',
+		Industry: '',
+		TaxNo: '',
+	});
 	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
@@ -43,12 +54,19 @@ const CustomerList = () => {
 
 	const handleCancel = () => {
 		setAdding(false);
-		setAddData({});
+		setAddData({
+			CustName: '',
+			CustId: '',
+			City: '',
+			Address: '',
+			ZipCode: '',
+			Contact: '',
+			JobTitle: '',
+			Phone: '',
+			Industry: '',
+			TaxNo: '',
+		});
 	};
-
-	// const onSearchQueryChange = (value) => {
-	// 	setSearchQuery(value);
-	// };
 
 	const showAdd = () => {
 		return (
@@ -232,7 +250,7 @@ const CustomerList = () => {
 							]}
 							searchQuery={searchQuery}
 						>
-							{adding ? showAdd() : ''}
+							{adding && showAdd()}
 						</ListResults>
 					</Box>
 				</Container>

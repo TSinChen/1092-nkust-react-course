@@ -18,7 +18,11 @@ import Buttons from 'src/components/list/buttons/Buttons';
 const OrderList = () => {
 	const [salesOrders, setSalesOrders] = useState([]);
 	const [adding, setAdding] = useState(false);
-	const [addData, setAddData] = useState({});
+	const [addData, setAddData] = useState({
+		OrderId: '',
+		EmpId: '',
+		CustId: '',
+	});
 	const [searchQuery, setSearchQuery] = useState('');
 
 	useEffect(() => {
@@ -33,7 +37,7 @@ const OrderList = () => {
 		setAdding(true);
 		setAddData({
 			...addData,
-			seq: salesOrders.length + 1,
+			seq: salesOrders[salesOrders.length - 1].seq + 1,
 		});
 	};
 
@@ -47,11 +51,11 @@ const OrderList = () => {
 
 	const handleCancel = () => {
 		setAdding(false);
-		setAddData({});
-	};
-
-	const onSearchQueryChange = (value) => {
-		setSearchQuery(value);
+		setAddData({
+			OrderId: '',
+			EmpId: '',
+			CustId: '',
+		});
 	};
 
 	const showAdd = () => {
@@ -141,7 +145,7 @@ const OrderList = () => {
 							cells={['OrderId', 'EmpId', 'CustId', 'OrderDate']}
 							searchQuery={searchQuery}
 						>
-							{adding ? showAdd() : ''}
+							{adding && showAdd()}
 						</ListResults>
 					</Box>
 				</Container>
