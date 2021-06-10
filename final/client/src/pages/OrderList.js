@@ -20,7 +20,7 @@ const OrderList = () => {
 	const [adding, setAdding] = useState(false);
 	const [addData, setAddData] = useState({
 		OrderId: '',
-		EmpId: '',
+		EmpId: localStorage.getItem('employeeID'),
 		CustId: '',
 	});
 	const [searchQuery, setSearchQuery] = useState('');
