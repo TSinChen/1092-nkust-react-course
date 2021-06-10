@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import { Helmet } from 'react-helmet';
 import axios from 'axios';
 import {
@@ -16,12 +17,14 @@ import * as constants from '../apis/constants';
 import Buttons from 'src/components/list/buttons/Buttons';
 
 const OrderList = () => {
+	const { user } = useContext(UserContext);
 	const [salesOrders, setSalesOrders] = useState([]);
 	const [adding, setAdding] = useState(false);
 	const [addData, setAddData] = useState({
 		OrderId: '',
-		EmpId: localStorage.getItem('employeeID'),
+		EmpId: user.EmpId,
 		CustId: '',
+		Descript: '',
 	});
 	const [searchQuery, setSearchQuery] = useState('');
 
@@ -53,8 +56,8 @@ const OrderList = () => {
 		setAdding(false);
 		setAddData({
 			OrderId: '',
-			EmpId: '',
 			CustId: '',
+			Descript: '',
 		});
 	};
 
@@ -110,6 +113,19 @@ const OrderList = () => {
 						disabled
 					/>
 				</TableCell>
+				<TableCell>
+					<Input
+						style={{ width: '100%' }}
+						placeholder={'Descript here...'}
+						value={addData.Descript}
+						onChange={(e) => {
+							setAddData({
+								...addData,
+								Descript: e.target.value,
+							});
+						}}
+					/>
+				</TableCell>
 				<Buttons
 					adding={adding}
 					handlePost={handlePost}
@@ -142,7 +158,13 @@ const OrderList = () => {
 						<ListResults
 							type="salesOrder"
 							data={salesOrders}
-							cells={['OrderId', 'EmpId', 'CustId', 'OrderDate']}
+							cells={[
+								'OrderId',
+								'EmpId',
+								'CustId',
+								'OrderDate',
+								'Descript',
+							]}
 							searchQuery={searchQuery}
 						>
 							{adding && showAdd()}

@@ -130,6 +130,29 @@ const SalesOrderRow = ({
 			>
 				{dateFormat(newData.OrderDate)}
 			</TableCell>
+			<TableCell
+				style={{ cursor: 'pointer' }}
+				onClick={() => handleNavigation(item.OrderId)}
+			>
+				{editing ? (
+					<Input
+						style={{ width: '100%' }}
+						placeholder={item.Descript}
+						value={newData.Descript}
+						onChange={(e) => {
+							setNewData({
+								...newData,
+								Descript: e.target.value,
+							});
+						}}
+						onClick={(e) => {
+							e.stopPropagation();
+						}}
+					/>
+				) : (
+					newData.Descript
+				)}
+			</TableCell>
 			<Buttons
 				type={type}
 				editing={editing}

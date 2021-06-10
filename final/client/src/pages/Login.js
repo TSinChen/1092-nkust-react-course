@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
+import axios from 'axios';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { Formik } from 'formik';
@@ -13,12 +15,31 @@ import {
 } from '@material-ui/core';
 import FacebookIcon from 'src/icons/Facebook';
 import GoogleIcon from 'src/icons/Google';
+import * as constants from '../apis/constants';
 
 const Login = () => {
 	const navigate = useNavigate();
-
 	const [employeeID, setEmployeeID] = useState('');
 	const [password, setPassword] = useState('');
+	const { setUser } = useContext(UserContext);
+
+	const handleSubmit = (employeeID) => {
+		const getUser = async (id) => {
+			const res = await axios.get(`${constants.URL}/employees/${id}`, {
+				params: {
+					password,
+				},
+			});
+			if (res.data[0]) {
+				setUser(res.data[0]);
+				navigate('/app/account', { replace: true });
+			} else {
+				window.location.reload();
+				alert(res.data.message);
+			}
+		};
+		getUser(employeeID);
+	};
 
 	return (
 		<>
@@ -41,8 +62,8 @@ const Login = () => {
 							password: '',
 						}}
 						onSubmit={() => {
-							localStorage.setItem('employeeID', employeeID);
-							navigate('/app/account', { replace: true });
+							// localStorage.setItem('employeeID', employeeID);
+							handleSubmit(employeeID);
 						}}
 					>
 						{({

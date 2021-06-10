@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
 	Box,
 	Button,
@@ -36,28 +35,30 @@ const states = [
 	{ label: '連江縣' },
 ];
 
-const AccountProfileDetails = (props) => {
-	const [user, setUser] = useState();
+const AccountProfileDetails = ({ user }) => {
+	const [newUser, setNewUser] = useState({
+		EmpId: '',
+		EmpName: '',
+		JobTitle: '',
+		Phone: '',
+		City: '',
+		Address: '',
+	});
 
 	const handleChange = (event) => {
-		setUser({
-			...user,
+		setNewUser({
+			...newUser,
 			[event.target.name]: event.target.value,
 		});
 	};
 
 	useEffect(() => {
-		const getUser = async () => {
-			const empId = localStorage.getItem('employeeID');
-			const res = await axios.get(`/employees/${empId}`);
-			setUser(res.data[0]);
-		};
-		getUser();
-	}, []);
+		setNewUser(user);
+	}, [user]);
 
-	if (user) {
+	if (newUser) {
 		return (
-			<form autoComplete="off" noValidate {...props}>
+			<form autoComplete="off" noValidate>
 				<Card>
 					<CardHeader
 						subheader="The information can be edited"
@@ -72,9 +73,9 @@ const AccountProfileDetails = (props) => {
 									label="Employee ID"
 									name="EmpId"
 									required
-									value={user.EmpId}
+									value={newUser.EmpId}
 									variant="outlined"
-									placeholder={user.EmpId}
+									placeholder={newUser.EmpId}
 									disabled
 								/>
 							</Grid>
@@ -84,9 +85,9 @@ const AccountProfileDetails = (props) => {
 									label="Name"
 									name="EmpName"
 									required
-									value={user.EmpName}
+									value={newUser.EmpName}
 									variant="outlined"
-									placeholder={user.EmpName}
+									placeholder={newUser.EmpName}
 									onChange={handleChange}
 								/>
 							</Grid>
@@ -96,9 +97,9 @@ const AccountProfileDetails = (props) => {
 									label="Job Title"
 									name="JobTitle"
 									required
-									value={user.JobTitle}
+									value={newUser.JobTitle}
 									variant="outlined"
-									placeholder={user.JobTitle}
+									placeholder={newUser.JobTitle}
 									onChange={handleChange}
 								/>
 							</Grid>
@@ -108,9 +109,9 @@ const AccountProfileDetails = (props) => {
 									label="Phone Number"
 									name="Phone"
 									required
-									value={user.Phone}
+									value={newUser.Phone}
 									variant="outlined"
-									placeholder={user.Phone}
+									placeholder={newUser.Phone}
 									onChange={handleChange}
 								/>
 							</Grid>
@@ -123,14 +124,15 @@ const AccountProfileDetails = (props) => {
 									select
 									SelectProps={{ native: true }}
 									variant="outlined"
+									value={newUser.City}
 									onChange={handleChange}
 								>
-									<option value={user.City}>
-										{user.City}
+									<option value={newUser.City}>
+										{newUser.City}
 									</option>
 									{states.map((option) => (
 										<option
-											key={option.value}
+											key={option.label}
 											value={option.label}
 										>
 											{option.label}
@@ -144,9 +146,9 @@ const AccountProfileDetails = (props) => {
 									label="Address"
 									name="Address"
 									required
-									value={user.Address}
+									value={newUser.Address}
 									variant="outlined"
-									placeholder={user.Address}
+									placeholder={newUser.Address}
 									onChange={handleChange}
 								/>
 							</Grid>

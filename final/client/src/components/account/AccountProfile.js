@@ -1,5 +1,3 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import {
 	Avatar,
 	Box,
@@ -11,20 +9,9 @@ import {
 	Typography,
 } from '@material-ui/core';
 
-const AccountProfile = (props) => {
-	const [user, setUser] = useState({});
-
-	useEffect(() => {
-		const getUser = async () => {
-			const empId = localStorage.getItem('employeeID');
-			const res = await axios.get(`/employees/${empId}`);
-			setUser(res.data[0]);
-		};
-		getUser();
-	}, []);
-
+const AccountProfile = ({ user }) => {
 	return (
-		<Card {...props}>
+		<Card>
 			<CardContent>
 				<Box
 					sx={{

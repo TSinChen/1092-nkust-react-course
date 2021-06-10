@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
+import { useContext } from 'react';
+import { UserContext } from '../contexts/UserContext';
 import { Link as RouterLink, useLocation } from 'react-router-dom';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import {
 	Avatar,
@@ -25,8 +26,6 @@ import {
 	ShoppingCart as ShoppingCartIcon,
 } from 'react-feather';
 import NavItem from './NavItem';
-
-import * as constants from '../apis/constants';
 
 const items = [
 	{
@@ -82,25 +81,17 @@ const items = [
 ];
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
+	const { user, setUser } = useContext(UserContext);
 	const location = useLocation();
 	const [isLogin, setIsLogin] = useState();
-	const [user, setUser] = useState({});
 
 	useEffect(() => {
-		const empID = localStorage.getItem('employeeID');
-
-		const getEmployee = async () => {
-			const res = await axios.get(constants.URL + '/employees/' + empID);
-			setUser(res.data[0]);
-		};
-
-		if (empID) {
+		if (user.EmpId) {
 			setIsLogin(true);
-			getEmployee();
 		} else {
 			setIsLogin(false);
 		}
-	}, []);
+	}, [user]);
 
 	useEffect(() => {
 		if (openMobile && onMobileClose) {
@@ -154,7 +145,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 									title="Logout"
 									icon={item.icon}
 									onClick={() => {
-										localStorage.setItem('employeeID', '');
+										setUser({});
 									}}
 								/>
 							);
