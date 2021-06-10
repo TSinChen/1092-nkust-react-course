@@ -1,19 +1,12 @@
-import express, { json } from 'express';
-import mysql from 'mysql';
+import express from 'express';
 import cors from 'cors';
 
+import db from './db.js'
 import employeesRoutes from './routes/employees.js';
 import productsRoutes from './routes/products.js';
 import customersRoutes from './routes/customers.js';
 import salesOrdersRoutes from './routes/salesOrders.js';
 import orderDetailsRoutes from './routes/orderDetails.js';
-
-const db = mysql.createConnection({
-	host: 'localhost',
-	user: 'root',
-	password: 'root',
-	database: 'mmisdb',
-});
 
 db.connect((err) => {
 	if (err) {
