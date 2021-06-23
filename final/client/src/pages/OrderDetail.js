@@ -50,7 +50,7 @@ const OrderDetail = () => {
 			}
 		};
 		getDetail();
-	}, [addData, oid]);
+	}, [oid]);
 
 	const handleAdd = () => {
 		setAdding(true);
