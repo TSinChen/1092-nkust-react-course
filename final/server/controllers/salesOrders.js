@@ -30,9 +30,8 @@ export const getSalesOrder = async (req, res) => {
 
 export const patchSalesOrder = async (req, res) => {
 	const { oid } = req.params;
-	const { EmpId, CustId } = req.query;
-
-	const sql = `UPDATE salesorder SET EmpId = '${EmpId}', CustId = '${CustId}' WHERE OrderId = '${oid}'`;
+	const { EmpId, CustId, Descript } = req.query;
+	const sql = `UPDATE salesorder SET EmpId = '${EmpId}', CustId = '${CustId}', Descript = '${Descript}' WHERE OrderId = '${oid}'`;
 	db.query(sql, (err, result) => {
 		if (err) throw err;
 		res.json(result);
