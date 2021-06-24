@@ -43,7 +43,7 @@ const ProductList = () => {
 		await axios.post(constants.URL + '/products', null, {
 			params: addData,
 		});
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleCancel = () => {

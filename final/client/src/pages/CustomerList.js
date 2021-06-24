@@ -49,7 +49,7 @@ const CustomerList = () => {
 		await axios.post(constants.URL + '/customers', null, {
 			params: addData,
 		});
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleCancel = () => {

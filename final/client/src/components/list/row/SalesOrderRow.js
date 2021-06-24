@@ -49,7 +49,7 @@ const SalesOrderRow = ({
 		await axios.delete(`${constants.URL}/salesOrders/${id}`);
 		handleCancelEdit(id);
 		setDeleting(false);
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	return (

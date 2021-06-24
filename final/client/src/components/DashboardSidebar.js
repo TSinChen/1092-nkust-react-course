@@ -82,7 +82,6 @@ const items = [
 
 const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 	const { user, setUser } = useContext(UserContext);
-	const location = useLocation();
 	const [isLogin, setIsLogin] = useState();
 
 	useEffect(() => {
@@ -97,7 +96,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile }) => {
 		if (openMobile && onMobileClose) {
 			onMobileClose();
 		}
-	}, [location.pathname, openMobile, onMobileClose]);
+	}, [openMobile, onMobileClose]);
 
 	const content = (
 		<Box

@@ -43,7 +43,7 @@ const ProductRow = ({
 		await axios.delete(`${constants.URL}/products/${id}`);
 		handleCancelEdit(id);
 		setDeleting(false);
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	return (

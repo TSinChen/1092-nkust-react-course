@@ -47,7 +47,7 @@ const CustomerRow = ({
 		await axios.delete(`${constants.URL}/customers/${id}`);
 		handleCancelEdit(id);
 		setDeleting(false);
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	return (

@@ -49,7 +49,7 @@ const OrderList = () => {
 		await axios.post(constants.URL + '/salesOrders', null, {
 			params: addData,
 		});
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleCancel = () => {

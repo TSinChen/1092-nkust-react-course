@@ -61,7 +61,7 @@ const OrderDetail = () => {
 		await axios.post(constants.URL + '/orderDetails', null, {
 			params: addData,
 		});
-		window.location.reload();
+		// window.location.reload();
 	};
 
 	const handleCancel = () => {
